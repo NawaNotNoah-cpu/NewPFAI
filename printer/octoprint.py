@@ -7,12 +7,40 @@ HEADERS = {
     "X-Api-Key": API_KEY
 }
 def safe_int(value):
-
     try:
         return int(value)
-
     except (ValueError, TypeError):
         return None
+
+
+def safe_get(dictionary, *keys):
+    """
+    Safely traverse nested dictionaries.
+    Returns None if any key is missing.
+    """
+    current = dictionary
+
+    for key in keys:
+        if not isinstance(current, dict):
+            return None
+
+        current = current.get(key)
+
+        if current is None:
+            return None
+
+    return current
+def filename(self):
+
+    job = self.job()
+
+    try:
+
+        return job["job"]["file"]["name"]
+
+    except Exception:
+
+        return "unknown.gcode"
 
 class OctoPrinter:
 
@@ -54,21 +82,35 @@ class OctoPrinter:
 
         return {
 
-            "state":
-                job["state"],
+    "state":
+        job.get("state"),
 
-            "progress":
-                job["progress"]["completion"],
+    "progress":
+        job.get("progress", {}).get("completion"),
 
-            "current_layer":
-                safe_int(layer["layer"]["current"]),
+    "current_layer":
+        safe_int(
+            safe_get(layer, "layer", "current")
+        ),
 
-            "total_layers":
-                safe_int(layer["layer"]["total"]),
+    "total_layers":
+        safe_int(
+            safe_get(layer, "layer", "total")
+        ),
 
-            "nozzle":
-                printer["temperature"]["tool0"]["actual"],
+    "nozzle":
+        safe_get(
+            printer,
+            "temperature",
+            "tool0",
+            "actual"
+        ),
 
-            "bed":
-                printer["temperature"]["bed"]["actual"]
-        }
+    "bed":
+        safe_get(
+            printer,
+            "temperature",
+            "bed",
+            "actual"
+        )
+}

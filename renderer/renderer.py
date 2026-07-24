@@ -3,60 +3,8 @@ import math
 import numpy as np
 import matplotlib; matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+from config import *
 
-
-# ==================================================
-# CONFIG
-# ==================================================
-
-GCODE_FILE = "test.gcode"
-
-OUTPUT_DIR = "outputs/renders"
-
-
-# Render this layer
-TARGET_LAYER = 300
-
-
-# Virtual camera
-#
-# Distance does not affect orthographic scale,
-# but controls camera placement.
-#
-CAMERA_DISTANCE = 800
-
-
-# Rotation around print center
-#
-# X = pitch
-# Y = roll
-# Z = yaw
-#
-CAMERA_PITCH = 0
-CAMERA_ROLL = 0
-CAMERA_YAW = 0
-
-
-# Image settings
-
-IMAGE_WIDTH = 1920
-IMAGE_HEIGHT = 1080
-
-DPI = 600
-
-
-LINE_WIDTH = 1.0
-
-# Background color
-BACKGROUND_COLOR = "white"
-
-# Extrusion line color
-LINE_COLOR = "#152885"
-
-# Alternative examples:
-# LINE_COLOR = "#404040"
-# LINE_COLOR = "#00FF00"
-# LINE_COLOR = (0.2, 0.2, 0.2)
 
 
 # ==================================================
@@ -464,15 +412,15 @@ def render(
 
 
     os.makedirs(
-        OUTPUT_DIR,
+        RENDER_OUTPUT_DIR,
         exist_ok=True
     )
 
 
 
     output=os.path.join(
-        OUTPUT_DIR,
-        f"layer_{target_layer}.png"
+        RENDER_OUTPUT_DIR,
+        f"layer_{target_layer:04d}.png"
     )
 
 
@@ -500,15 +448,24 @@ def render(
 # MAIN
 # ==================================================
 
-if __name__ == "__main__":
+class GCodeRenderer:
+
+    def __init__(
+        self,
+        gcode_file
+    ):
+
+        self.layers = parse_gcode(
+            gcode_file
+        )
 
 
-    layers = parse_gcode(
-        GCODE_FILE
-    )
+    def render_layer(
+        self,
+        layer
+    ):
 
-
-    render(
-        layers,
-        TARGET_LAYER
-    )
+        render(
+            self.layers,
+            layer
+        )

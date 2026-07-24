@@ -1,5 +1,5 @@
 from PIL import Image
-
+from config import *
 import torch
 
 from transformers import (
@@ -29,32 +29,37 @@ class QwenVision:
 
         print("Qwen ready.")
 
-    def analyze(self, image_path):
+    def analyze(
+        self,
+        actual_image,
+        expected_image,
+        metadata
+    ):
 
-        image = Image.open(image_path)
+        actual = Image.open(actual_image)
+        expected = Image.open(expected_image)
 
         messages = [
             {
                 "role": "user",
-                "content": [
+                "content": 
+                [
+
                     {
-                        "type": "image",
-                        "image": image,
+                        "type":"image",
+                        "image":expected
                     },
+
                     {
-                        "type": "text",
-                        "text":
-                        (
-                            "You are inspecting a 3D printer.\n\n"
-                            "Describe every object visible., Color, Shape, etc.\n"
-                            "List any print failures.\n"
-                            "Estimate confidence from 0 to 100%.\n"
-                            "\n"
-                            "If no failure exists, explicitly say "
-                            "'Print appears healthy.'"
-                        ),
+                        "type":"image",
+                        "image":actual
                     },
-                ],
+
+                    {
+                        "type":"text",
+                        "text":PROMPT
+                    }
+                ]
             }
         ]
 
@@ -66,7 +71,7 @@ class QwenVision:
 
         inputs = self.processor(
             text=[prompt],
-            images=[image],
+            images=[actual,expected],
             return_tensors="pt",
         ).to(self.model.device)
 
