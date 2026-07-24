@@ -1,5 +1,6 @@
 import time
 from config import *
+import os
 
 from camera.webcam import Webcam
 from printer.octoprint import OctoPrinter 
@@ -21,10 +22,13 @@ scheduler = LayerScheduler(
 )
 
 vision = QwenVision(MODEL_NAME)
-
 last_layer = -1
 scheduler_initialized = False
+filename = printer.filename()
 
+print_name = os.path.splitext(filename)[0]
+
+session, attempt = create_session(print_name)
 
 print("System Ready")
 
@@ -71,26 +75,38 @@ try:
 
             last_layer = current_layer
 
-            filename = (
-                f"layer_{current_layer:04d}.jpg"
+            basename = (
+                f"{print_name}"
+                f"_I{attempt:03d}"
+                f"_L{current_layer:04d}"
             )
 
+            basename = (
+                f"{print_name}"
+                f"_I{attempt:03d}"
+                f"_L{current_layer:04d}"
+            )
             image = camera.capture(
-                IMAGE_OUTPUT_DIR,
-                filename
+                session / "images",
+                f"{basename}.jpg"
             )
 
-            print(
-                f"Captured {filename}"
-            )
+            print(f"Captured {basename}.jpg")
 
 
             print(
                 f"Rendering layer {current_layer}"
             )
 
+            render = (
+                session
+                / "renders"
+                / f"{basename}.png"
+            )
+
             renderer.render_layer(
-                current_layer
+                current_layer,
+                render
             )
 
 
@@ -98,47 +114,69 @@ try:
                 "Render complete"
             )
 
-        time.sleep(POLL_INTERVAL)
+            metadata = {
 
-        render = f"{RENDER_OUTPUT_DIR}/layer_{current_layer:04d}.png"
+                "print_name": print_name,
 
-        metadata = {
+                "attempt": attempt,
 
-            "print_name": print_name,
+                "layer": current_layer,
 
-            "attempt": attempt,
+                "total_layers": state["total_layers"],
 
-            "layer": current_layer,
+                "progress": state["progress"],
 
-            "total_layers": state["total_layers"],
+                "z_height": state["z"]
+            }
 
-            "progress": state["progress"],
+            result = vision.analyze(
 
-            "z_height": state["z"]
-        }
+                image,
 
-        result = vision.analyze(
+                render,
 
-            image,
-
-            render,
-
-            metadata
-        )
-
-        analysis = json.loads(result)
-        print(analysis)
-
-        if(
-            not analysis["healthy"]
-            and analysis["severity"] >= 7
-        ):
-    
-
-            printer.pause()
-            print(
-                "Print paused due to detected issue."
+                metadata
             )
+
+            clean = (
+                result
+                .replace("```json", "")
+                .replace("```", "")
+                .strip()
+            )
+
+            analysis = json.loads(clean)
+
+            analysis_path = (
+                session
+                / "analysis"
+                / f"{basename}.json"
+            )
+
+            with open(
+                analysis_path,
+                "w"
+            ) as f:
+
+                json.dump(
+                    analysis,
+                    f,
+                    indent=4
+                )
+            print(analysis)
+
+            if(
+                not analysis["healthy"]
+                and analysis["severity"] >= 7
+            ):
+        
+
+                printer.pause()
+                print(
+                    "Print paused due to detected issue."
+                )
+
+        time.sleep(POLL_INTERVAL)
 
 
 finally:

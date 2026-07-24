@@ -73,17 +73,17 @@ PROMPT = """
 
 Metadata
 
-Print name: {metadata["print_name"]}
+Print name: {print_name}
 
-Attempt: {metadata["attempt"]}
+Attempt: {attempt}
 
-Current layer: {metadata["layer"]}
+Current layer: {layer}
 
-Total layers: {metadata["total_layers"]}
+Total layers: {total_layers}
 
-Completion: {metadata["progress"]:.1f}%
+Completion: {progress:.1f}%
 
-Current Z Height: {metadata["z_height"]:.2f} mm
+Current Z Height: {z_height:.2f} mm
 
 The FIRST image is the expected render.
 

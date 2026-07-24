@@ -281,7 +281,8 @@ def project_points(points, center):
 
 def render(
     layers,
-    target_layer
+    target_layer,
+    output_path
 ):
 
 
@@ -412,20 +413,12 @@ def render(
 
 
     os.makedirs(
-        RENDER_OUTPUT_DIR,
+        os.path.dirname(output_path),
         exist_ok=True
     )
 
-
-
-    output=os.path.join(
-        RENDER_OUTPUT_DIR,
-        f"layer_{target_layer:04d}.png"
-    )
-
-
     plt.savefig(
-        output,
+        output_path,
         dpi=DPI,
         bbox_inches="tight",
         pad_inches=0
@@ -439,7 +432,7 @@ def render(
 
     print(
         "Saved:",
-        output
+        output_path
     )
 
 
@@ -462,10 +455,12 @@ class GCodeRenderer:
 
     def render_layer(
         self,
-        layer
+        layer,
+        output_path
     ):
 
         render(
             self.layers,
-            layer
+            layer,
+            output_path
         )

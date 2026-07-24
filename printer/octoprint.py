@@ -30,17 +30,6 @@ def safe_get(dictionary, *keys):
             return None
 
     return current
-def filename(self):
-
-    job = self.job()
-
-    try:
-
-        return job["job"]["file"]["name"]
-
-    except Exception:
-
-        return "unknown.gcode"
 
 class OctoPrinter:
 
@@ -61,11 +50,52 @@ class OctoPrinter:
 
         return self.api("/api/printer")
 
+    def filename(self):
 
-    def job(self):
+        job = self.job()
 
-        return self.api("/api/job")
+        try:
+            return job["job"]["file"]["name"]
+        except Exception:
+            return "unknown.gcode"
+        def job(self):
 
+            return self.api("/api/job")
+    
+    def pause(self):
+
+        requests.post(
+            OCTOPRINT_URL + "/api/job",
+            headers=HEADERS,
+            json={
+                "command":"pause",
+                "action":"pause"
+            },
+            timeout=5
+        )
+
+    def resume(self):
+
+        requests.post(
+            OCTOPRINT_URL + "/api/job",
+            headers=HEADERS,
+            json={
+                "command":"pause",
+                "action":"resume"
+            },
+            timeout=5
+        )
+
+    def cancel(self):
+
+        requests.post(
+            OCTOPRINT_URL + "/api/job",
+            headers=HEADERS,
+            json={
+                "command":"cancel"
+            },
+            timeout=5
+        )
 
     def layer(self):
 
@@ -81,6 +111,14 @@ class OctoPrinter:
         layer = self.layer()
 
         return {
+    "z":
+    float(
+        safe_get(
+            layer,
+            "height",
+            "current"
+        ) or 0.0
+    ),
 
     "state":
         job.get("state"),

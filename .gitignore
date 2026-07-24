@@ -8,3 +8,8 @@ testslope.gcode
 /scheduler/__pycache__
 /printer/__pycache__
 /camera/__pycache__
+/vision/__pycache__
+/printer/__pycache__
+/__pycache__
+test_camera.py
+test_octoprint.py

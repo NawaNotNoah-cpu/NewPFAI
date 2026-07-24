@@ -34,10 +34,15 @@ class QwenVision:
         actual_image,
         expected_image,
         metadata
+        
     ):
 
         actual = Image.open(actual_image)
         expected = Image.open(expected_image)
+
+        prompt_text = PROMPT.format(
+            **metadata
+        )
 
         messages = [
             {
@@ -57,7 +62,7 @@ class QwenVision:
 
                     {
                         "type":"text",
-                        "text":PROMPT
+                        "text": prompt_text
                     }
                 ]
             }
