@@ -6,6 +6,14 @@ from config import *
 HEADERS = {
     "X-Api-Key": API_KEY
 }
+def safe_float(value):
+
+    try:
+        return float(value)
+
+    except (ValueError, TypeError):
+        return None
+    
 def safe_int(value):
     try:
         return int(value)
@@ -52,15 +60,27 @@ class OctoPrinter:
 
     def filename(self):
 
-        job = self.job()
-
         try:
-            return job["job"]["file"]["name"]
-        except Exception:
-            return "unknown.gcode"
-        def job(self):
+            job = self.job()
 
-            return self.api("/api/job")
+            filename = (
+                job
+                .get("job", {})
+                .get("file", {})
+                .get("name")
+            )
+
+            if filename:
+                return filename
+
+        except Exception as e:
+
+            print("Filename error:", e)
+
+        return "unknown.gcode"
+    def job(self):
+
+        return self.api("/api/job")
     
     def pause(self):
 
@@ -112,24 +132,19 @@ class OctoPrinter:
 
         return {
     "z":
-    float(
-        safe_get(
-            layer,
-            "height",
-            "current"
-        ) or 0.0
-    ),
+        None,
 
     "state":
         job.get("state"),
 
     "progress":
-        job.get("progress", {}).get("completion"),
-
-    "current_layer":
-        safe_int(
-            safe_get(layer, "layer", "current")
+        float(
+            job.get("progress", {}).get("completion") or 0.0
         ),
+        "current_layer":
+            safe_int(
+                safe_get(layer, "layer", "current")
+            ),
 
     "total_layers":
         safe_int(

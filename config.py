@@ -85,9 +85,10 @@ Completion: {progress:.1f}%
 
 Current Z Height: {z_height:.2f} mm
 
-The FIRST image is the expected render.
+Image 1 is the expected G-code render.
+Image 2 is the webcam photograph.
 
-The SECOND image is the actual webcam image.
+Compare image 2 against image 1.
 
 Only evaluate whether the current printed geometry matches what should exist at THIS layer.
 
@@ -129,13 +130,13 @@ Severity 6-7 indicates a significant issue, and the print should be paused for i
 Severity 8-10 indicates a severe issue, and the print should be paused immediately.
 Return ONLY valid JSON.
 
-    {
+    {{
         "healthy": true,
         "confidence": 96,
         "severity": 0,
         "failure_type": "none",
         "reason": "Matches expected geometry."
-    }
+    }}
 
 
 """

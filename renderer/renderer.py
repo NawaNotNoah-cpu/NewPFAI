@@ -451,6 +451,14 @@ class GCodeRenderer:
         self.layers = parse_gcode(
             gcode_file
         )
+    def get_layer_height(self, layer):
+
+        segments = self.layers.get(layer)
+
+        if not segments:
+            return None
+
+        return segments[-1][5]
 
 
     def render_layer(

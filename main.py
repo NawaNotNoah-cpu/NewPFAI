@@ -26,6 +26,9 @@ last_layer = -1
 scheduler_initialized = False
 filename = printer.filename()
 
+if filename is None:
+    filename = "unknown.gcode"
+
 print_name = os.path.splitext(filename)[0]
 
 session, attempt = create_session(print_name)
@@ -81,11 +84,6 @@ try:
                 f"_L{current_layer:04d}"
             )
 
-            basename = (
-                f"{print_name}"
-                f"_I{attempt:03d}"
-                f"_L{current_layer:04d}"
-            )
             image = camera.capture(
                 session / "images",
                 f"{basename}.jpg"
@@ -122,11 +120,17 @@ try:
 
                 "layer": current_layer,
 
-                "total_layers": state["total_layers"],
+                "total_layers": state["total_layers"]
+                    if state["total_layers"] is not None
+                    else 0,
 
-                "progress": state["progress"],
+                "progress": state["progress"]
+                    if state["progress"] is not None
+                    else 0.0,
 
-                "z_height": state["z"]
+                "z_height": renderer.get_layer_height(current_layer)
+                    if state["z"] is not None
+                    else 0.0
             }
 
             result = vision.analyze(
@@ -138,12 +142,39 @@ try:
                 metadata
             )
 
+            print("\n========== RAW QWEN OUTPUT ==========")
+            print(result)
+            print("=====================================\n")
+
+
             clean = (
                 result
                 .replace("```json", "")
                 .replace("```", "")
                 .strip()
             )
+
+            if not clean:
+                print("Qwen returned empty output.")
+                continue
+
+            # Remove Qwen formatting wrappers
+
+            clean = result.strip()
+
+            if "```json" in clean:
+                clean = clean.split("```json")[1]
+
+            if "```" in clean:
+                clean = clean.split("```")[0]
+
+            clean = clean.strip()
+
+            # Remove assistant prefix if present
+
+            if clean.startswith("assistant"):
+                clean = clean.replace("assistant", "", 1).strip()
+
 
             analysis = json.loads(clean)
 
@@ -167,7 +198,8 @@ try:
 
             if(
                 not analysis["healthy"]
-                and analysis["severity"] >= 7
+                and analysis["severity"] >= 5
+                and analysis["confidence"] >= 70
             ):
         
 

@@ -76,7 +76,7 @@ class QwenVision:
 
         inputs = self.processor(
             text=[prompt],
-            images=[actual,expected],
+            images=[expected,actual],
             return_tensors="pt",
         ).to(self.model.device)
 
