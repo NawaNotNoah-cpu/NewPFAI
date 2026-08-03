@@ -1,4 +1,6 @@
 import time
+
+from networkx import config
 from config import *
 import os
 
@@ -6,6 +8,7 @@ from camera.webcam import Webcam
 from printer.octoprint import OctoPrinter 
 from renderer.renderer import GCodeRenderer
 from vision.qwen import QwenVision
+from cobot.extractor import extractor
 from scheduler.layer_scheduler import LayerScheduler
 from session import create_session
 import json
@@ -130,7 +133,16 @@ try:
 
                 "z_height": renderer.get_layer_height(current_layer)
                     if state["z"] is not None
-                    else 0.0
+                    else 0.0,
+
+                "LINE_COLOR": config.LINE_COLOR,
+
+                "FILAMENT_COLOR": config.FILAMENT_COLOR,
+
+                # Alternative examples:
+                # LINE_COLOR = "#404040"
+                # LINE_COLOR = "#00FF00"
+                # LINE_COLOR = (0.2, 0.2, 0.2)
             }
 
             result = vision.analyze(
@@ -202,10 +214,32 @@ try:
                 and analysis["confidence"] >= 70
             ):
         
-                printer.pause()
+                printer.cancel()
                 print(
-                    "Print paused due to detected issue."
+                    "Print cancelled due to detected issue. Beginning Extraction"
                 )
+                printer.gcode("M140 R30")  # Turn off extruder
+                printer.gcode("M190 R30")  # Turn off bed
+                printer.gcode("G28")  # Home all axes
+                printer.gcode("G1 Y235 Z250 F3000")  # Move Z axis up
+                extractor.BrogiBox
+
+            if(
+                not analysis["healthy"]
+                and analysis["severity"] >= 8
+                and analysis["confidence"] >= 70
+            ):
+        
+                printer.cancel()
+                print(
+                    "Print cancelled due to detected issue. Beginning Extraction"
+                )
+                printer.gcode("M140 R30")  # Turn off extruder
+                printer.gcode("M190 R30")  # Turn off bed
+                printer.gcode("G28")  # Home all axes
+                printer.gcode("G1 Y235 Z250 F3000")  # Move Z axis up
+                extractor.BrogiBox
+                
 
         time.sleep(POLL_INTERVAL)
 

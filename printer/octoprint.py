@@ -117,6 +117,19 @@ class OctoPrinter:
             timeout=5
         )
 
+    def gcode(self, command):
+
+        response = requests.post(
+            OCTOPRINT_URL + "/api/printer/command",
+            headers=HEADERS,
+            json={
+                "commands": [command]
+            },
+            timeout=5
+        )
+
+        response.raise_for_status()
+
     def layer(self):
 
         return self.api(
