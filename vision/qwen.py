@@ -15,30 +15,51 @@ class QwenVision:
         print("Loading Qwen...")
 
         self.model = (
-            Qwen2_5_VLForConditionalGeneration
-            .from_pretrained(
+            Qwen2_5_VLForConditionalGeneration.from_pretrained(
                 model_name,
                 torch_dtype=torch.float16,
-                device_map="auto"
+                device_map="auto",
             )
         )
 
         self.processor = (
-            AutoProcessor.from_pretrained(model_name)
+            AutoProcessor.from_pretrained(
+                model_name,
+            )
         )
 
         print("Qwen ready.")
+
+        if torch.cuda.is_available():
+
+            print(
+                "Qwen GPU:",
+                torch.cuda.get_device_name(0)
+            )
+
+            print(
+                "VRAM allocated:",
+                round(
+                    torch.cuda.memory_allocated() / 1024**3,
+                    2
+                ),
+                "GB"
+            )
 
     def analyze(
         self,
         actual_image,
         expected_image,
         metadata
-        
     ):
 
-        actual = Image.open(actual_image)
-        expected = Image.open(expected_image)
+        actual = Image.open(
+            actual_image
+        ).convert("RGB")
+
+        expected = Image.open(
+            expected_image
+        ).convert("RGB")
 
         prompt_text = PROMPT.format(
             **metadata
@@ -47,23 +68,23 @@ class QwenVision:
         messages = [
             {
                 "role": "user",
-                "content": 
-                [
+                "content": [
 
                     {
-                        "type":"image",
-                        "image":expected
+                        "type": "image",
+                        "image": expected
                     },
 
                     {
-                        "type":"image",
-                        "image":actual
+                        "type": "image",
+                        "image": actual
                     },
 
                     {
-                        "type":"text",
+                        "type": "text",
                         "text": prompt_text
                     }
+
                 ]
             }
         ]
@@ -76,18 +97,34 @@ class QwenVision:
 
         inputs = self.processor(
             text=[prompt],
-            images=[expected,actual],
+            images=[expected, actual],
             return_tensors="pt",
-        ).to(self.model.device)
-
-        output = self.model.generate(
-            **inputs,
-            max_new_tokens=1024,
         )
 
+        # Move inputs to the model's active device
+        inputs = {
+            key: value.to(self.model.device)
+            if hasattr(value, "to")
+            else value
+            for key, value in inputs.items()
+        }
+
+        with torch.inference_mode():
+
+            output = self.model.generate(
+                **inputs,
+                max_new_tokens=256,
+                do_sample=False,
+            )
+
+        # Don't decode the original prompt.
+        input_length = inputs["input_ids"].shape[1]
+
+        generated = output[:, input_length:]
+
         text = self.processor.batch_decode(
-            output,
+            generated,
             skip_special_tokens=True,
         )[0]
 
-        return text
+        return text.strip()

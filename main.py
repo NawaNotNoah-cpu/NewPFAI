@@ -202,7 +202,6 @@ try:
                 and analysis["confidence"] >= 70
             ):
         
-
                 printer.pause()
                 print(
                     "Print paused due to detected issue."

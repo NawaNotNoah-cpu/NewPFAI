@@ -13,3 +13,4 @@ testslope.gcode
 /__pycache__
 test_camera.py
 test_octoprint.py
+/.venv

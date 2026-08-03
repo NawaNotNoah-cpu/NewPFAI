@@ -26,11 +26,10 @@ POLL_INTERVAL = 10.0
 # Renderer
 # ===========================
  
-GCODE_FILE = "testslope.gcode"
+GCODE_FILE = "snoopenchy.gcode"
 
 RENDER_OUTPUT_DIR = "outputs/renders"
 
-LINE_COLOR = "black"
 
 BACKGROUND_COLOR = "white"
 
@@ -52,7 +51,7 @@ DPI = 600
 
 LINE_WIDTH = 1.0
 
-LINE_COLOR = "#FF8000"
+LINE_COLOR = "#3901B1"
 
 # Alternative examples:
 # LINE_COLOR = "#404040"
@@ -85,50 +84,8 @@ Completion: {progress:.1f}%
 
 Current Z Height: {z_height:.2f} mm
 
-Image 1 is the expected G-code render.
-Image 2 is the webcam photograph.
-
-Compare image 2 against image 1.
-
-Only evaluate whether the current printed geometry matches what should exist at THIS layer.
-
-Ignore future geometry.
-
-Determine whether the printed object matches the expected geometry.
-
-Ignore:
-
-- lighting
-- color differences
-- printer frame
-- build plate texture
-- camera noise
-- background images
-
-Look for:
-
-- spaghetti
-- detached print
-- missing geometry
-- broken appendages
-- shifted layers
-- severe ringing
-- collapsed bridges
-- warping
-- overhang collapse
-- blobs
-- under extrusion
-- over extrusion
-- missing sections
-- unexpected objects
-- nozzle collisions
-
-A severity level of 0-10 is to be assigned, where 1 is minor and 10 is catastrophic.
-Severity 0-2 indicates a healthy print, and the print can continue.
-Severity 3-5 indicates a moderate issue, and the print should continue, however, the user should be notified.
-Severity 6-7 indicates a significant issue, and the print should be paused for inspection, and the user notified.
-Severity 8-10 indicates a severe issue, and the print should be paused immediately.
-Return ONLY valid JSON.
+s
+Return ONLY valid JSON. Below is an example of the expected output format. Make the reason much more detailed, including precise image analysis and information regarding the basis for the decision.
 
     {{
         "healthy": true,
