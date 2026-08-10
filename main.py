@@ -1,30 +1,49 @@
 import time
-
-from networkx import config
-from config import *
+import config
 import os
-
+from panel import InspectionPanel
 from camera.webcam import Webcam
 from printer.octoprint import OctoPrinter 
 from renderer.renderer import GCodeRenderer
-from vision.qwen import QwenVision
-from cobot.extractor import extractor
+from vision.gemini import GeminiVision
+try:
+    from cobot.extractor import BrogiBox
+    from cobot.extractor import NawaPusher
+except:
+    BrogiBox = None
+    NawaPusher = None
 from scheduler.layer_scheduler import LayerScheduler
 from session import create_session
 import json
+import re
 
+prompt = config.PROMPT
 
-camera = Webcam(CAMERA_INDEX)
+def extract_json(data):
+
+    if isinstance(data, dict):
+        return data
+
+    clean = data.strip()
+
+    if clean.startswith("```"):
+        clean = clean.replace("```json", "")
+        clean = clean.replace("```", "")
+        clean = clean.strip()
+
+    return json.loads(clean)
+
+camera = Webcam(config.CAMERA_INDEX)
 
 printer = OctoPrinter()
 renderer = GCodeRenderer(
-    GCODE_FILE
+    config.GCODE_FILE
 )
 scheduler = LayerScheduler(
-    INSPECTION_INTERVALS
+    config.INSPECTION_INTERVALS
 )
 
-vision = QwenVision(MODEL_NAME)
+vision = GeminiVision(config.MODEL_NAME)
 last_layer = -1
 scheduler_initialized = False
 filename = printer.filename()
@@ -36,14 +55,83 @@ print_name = os.path.splitext(filename)[0]
 
 session, attempt = create_session(print_name)
 
-print("System Ready")
+def handle_print_failure(
+    printer,
+    print_filename,
+    severity
+):
 
+    print()
+    print("====================================")
+    print("PRINT FAILURE CONFIRMED")
+    print("====================================")
+
+    print(
+        f"Severity: {severity}"
+    )
+
+    # Stop current print.
+    print("Cancelling print...")
+    printer.cancel()
+
+    # Give OctoPrint a moment to process cancellation.
+    time.sleep(3)
+
+    # Prepare printer for physical extraction.
+    ready = printer.prepare_for_extraction()
+
+    if not ready:
+
+        print(
+            "Printer did not reach safe extraction state."
+        )
+
+        return False
+
+    # Run robot extraction.
+    print(
+        "Printer is safe. Starting extraction..."
+    )
+
+    NawaPusher()
+
+    print(
+        "Extraction complete."
+    )
+
+    print(
+        f"Restarting print: {print_filename}"
+    )
+
+    started = printer.start_print(
+        print_filename
+    )
+
+    if not started:
+
+        print(
+            "Failed to start replacement print."
+        )
+
+        return False
+
+    print(
+        "Recovery complete. New print started."
+    )
+
+    return True
+
+print("System Ready")
+panel = InspectionPanel()
+panel.update()
 
 try:
 
     while True:
 
         state = printer.state()
+        panel.update_printer(state)
+        panel.update()
         total_layers = state["total_layers"]
 
 
@@ -62,13 +150,22 @@ try:
 
         if current_layer is None:
 
-            print("Waiting for active print...")
+            if state["state"] == "Printing":
 
-            time.sleep(30)
+                print(
+                    "Print active; waiting for layer information..."
+                )
+
+            else:
+
+                print(
+                    "Waiting for active print..."
+                )
+
+            time.sleep(5)
 
             continue
         print()
-
         print(state)
         print(
             "Next inspection:",
@@ -115,6 +212,14 @@ try:
                 "Render complete"
             )
 
+            panel.update_images(
+                camera_path=image,
+                render_path=render
+            )
+
+
+            panel.update()
+
             metadata = {
 
                 "print_name": print_name,
@@ -135,60 +240,89 @@ try:
                     if state["z"] is not None
                     else 0.0,
 
-                "LINE_COLOR": config.LINE_COLOR,
+                "line_color": config.LINE_COLOR,
 
-                "FILAMENT_COLOR": config.FILAMENT_COLOR,
+                "filament_color": config.FILAMENT_COLOR,
 
-                # Alternative examples:
-                # LINE_COLOR = "#404040"
-                # LINE_COLOR = "#00FF00"
-                # LINE_COLOR = (0.2, 0.2, 0.2)
             }
-
+            print("Analyzing images...")
             result = vision.analyze(
 
                 image,
-
                 render,
-
-                metadata
+                prompt
             )
 
-            print("\n========== RAW QWEN OUTPUT ==========")
-            print(result)
+            print("\n========== RAW GEMINI OUTPUT ==========")
+            print(json.dumps(
+                result,
+                indent=4
+            ))
             print("=====================================\n")
 
 
-            clean = (
-                result
-                .replace("```json", "")
-                .replace("```", "")
-                .strip()
-            )
+            analysis = None
 
-            if not clean:
-                print("Qwen returned empty output.")
+            for retry in range(3):
+
+                if retry == 0:
+
+                    response = result
+
+                else:
+
+                    print(
+                        f"Retrying Gemini analysis ({retry}/2)"
+                    )
+
+                    response = vision.analyze(
+                        image,
+                        render,
+                        prompt
+                    )
+
+
+                clean = extract_json(response)
+
+
+                if clean is None:
+
+                    print(
+                        "No JSON detected from Gemini"
+                    )
+
+                    continue
+
+
+                try:
+
+                    if isinstance(clean, dict):
+                        analysis = clean
+                    else:
+                        analysis = json.loads(clean)
+
+                    break
+
+
+                except json.JSONDecodeError as e:
+
+                    print(
+                        "Invalid JSON from Gemini:"
+                    )
+
+                    print(clean)
+
+                    print(e)
+
+
+
+            if analysis is None:
+
+                print(
+                    "Inspection failed after retries. Skipping layer."
+                )
+
                 continue
-
-            # Remove Qwen formatting wrappers
-
-            clean = result.strip()
-
-            if "```json" in clean:
-                clean = clean.split("```json")[1]
-
-            if "```" in clean:
-                clean = clean.split("```")[0]
-
-            clean = clean.strip()
-
-            # Remove assistant prefix if present
-
-            if clean.startswith("assistant"):
-                clean = clean.replace("assistant", "", 1).strip()
-
-
-            analysis = json.loads(clean)
 
             analysis_path = (
                 session
@@ -206,44 +340,71 @@ try:
                     f,
                     indent=4
                 )
-            print(analysis)
+            print(json.dumps(
+                analysis,
+                indent=4
+            ))
 
-            if(
+            panel.update_json(analysis)
+            panel.update()
+
+            if (
                 not analysis["healthy"]
+                and analysis["confidence"] >= 70
                 and analysis["severity"] >= 5
-                and analysis["confidence"] >= 70
             ):
-        
-                printer.cancel()
-                print(
-                    "Print cancelled due to detected issue. Beginning Extraction"
+
+                handled = handle_print_failure(
+                    printer,
+                    filename,
+                    analysis["severity"]
                 )
-                printer.gcode("M140 R30")  # Turn off extruder
-                printer.gcode("M190 R30")  # Turn off bed
-                printer.gcode("G28")  # Home all axes
-                printer.gcode("G1 Y235 Z250 F3000")  # Move Z axis up
-                extractor.BrogiBox
 
-            if(
-                not analysis["healthy"]
-                and analysis["severity"] >= 8
-                and analysis["confidence"] >= 70
-            ):
-        
-                printer.cancel()
-                print(
-                    "Print cancelled due to detected issue. Beginning Extraction"
-                )
-                printer.gcode("M140 R30")  # Turn off extruder
-                printer.gcode("M190 R30")  # Turn off bed
-                printer.gcode("G28")  # Home all axes
-                printer.gcode("G1 Y235 Z250 F3000")  # Move Z axis up
-                extractor.BrogiBox
-                
+                if handled:
 
-        time.sleep(POLL_INTERVAL)
+                    print(
+                        "Recovery complete. "
+                        "New print started."
+                    )
 
+                    # Wait until OctoPrint actually reports
+                    # the replacement job as Printing.
+                    if not printer.wait_for_print_start(filename):
 
+                        print(
+                            "Replacement print did not become active."
+                        )
+
+                        break
+
+                    # Reset inspection state only AFTER
+                    # the replacement print is active.
+                    scheduler = LayerScheduler(
+                        config.INSPECTION_INTERVALS
+                    )
+
+                    scheduler_initialized = False
+                    last_layer = -1
+
+                    print(
+                        "Waiting for layer information..."
+                    )
+
+                    continue
+                else:
+
+                    print(
+                        "Recovery failed. "
+                        "System will not restart print."
+                    )
+
+                    break
+                            
+
+        time.sleep(config.POLL_INTERVAL)
+
+ 
 finally:
 
     camera.release()
+    panel.close()

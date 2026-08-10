@@ -13,7 +13,6 @@ VEL = 0.05
 rtde_c = RTDEControl(ROBOT_IP)
 rtde_r = RTDEReceive(ROBOT_IP)
 current_pos = rtde_r.getActualTCPPose()[:6]
-print(current_pos)
 
 def BrogiBox():
     pose1 = [0.34807241863598354, 0.0408351029625623, 0.5348242964224846, -2.1591464657867423, 0.039864854978964824, -2.1520962658570983]
@@ -32,7 +31,41 @@ def BrogiBox():
     target_pose = rtde_c.moveL(pose4, VEL, ACCEL)
     current_pos = rtde_r.getActualTCPPose()[:3]
 
-BrogiBox()
+def NawaPusher():
+    #Position 1. Another approach step, high above position 3
+    new_pose = [0.626032384038685, -0.18281333086155396, 0.2885413248880511, -1.1663354611899008, -1.2380171806855922, -1.1716553519330546]
+    target_pose = rtde_c.moveL(new_pose, VEL, ACCEL)
+    current_pos = rtde_r.getActualTCPPose()[:3]
+    print(current_pos)
+
+
+    #Position 2. Just about to push, pusher is right above reader module.
+    new_pose = [0.7563443979091746, -0.1695957000898453, 0.14223663820099358, -1.1703089341867992, -1.2408758182424429, -1.1620150762338364]
+    target_pose = rtde_c.moveL(new_pose, VEL, ACCEL)
+    current_pos = rtde_r.getActualTCPPose()[:3]
+    print(current_pos)
+
+
+    #Position 3. Pushing motion completed
+    new_pose = [0.7395772307236698, 0.08323683102727122, 0.1422368774298231, -1.1702951950059732, -1.240909995007869, -1.1620928992525772]
+    target_pose = rtde_c.moveL(new_pose, VEL, ACCEL)
+    current_pos = rtde_r.getActualTCPPose()[:3]
+    print(current_pos)
+
+    #Back to position 2
+    new_pose = [0.7563443979091746, -0.1695957000898453, 0.14223663820099358, -1.1703089341867992, -1.2408758182424429, -1.1620150762338364]
+    target_pose = rtde_c.moveL(new_pose, VEL, ACCEL)
+    current_pos = rtde_r.getActualTCPPose()[:3]
+    print(current_pos)
+
+    #Position 1
+    new_pose = [0.626032384038685, -0.18281333086155396, 0.2885413248880511, -1.1663354611899008, -1.2380171806855922, -1.1716553519330546]
+    target_pose = rtde_c.moveL(new_pose, VEL, ACCEL)
+    current_pos = rtde_r.getActualTCPPose()[:3]
+    print(current_pos)
+
+def GetRobotPosition():
+    return rtde_r.getActualTCPPose()[:3]
 
 #Top Coupon
 

@@ -1,4 +1,14 @@
 # ===========================
+# UI PANEL
+# ===========================
+PANEL_TITLE = "NawaVision"
+PANEL_WIDTH = 800
+PANEL_HEIGHT = 600
+PANEL_BG = "#00274C"
+PANEL_TEXT = "#FFCB05"
+
+
+# ===========================
 # Camera
 # ===========================
 
@@ -9,24 +19,27 @@ IMAGE_OUTPUT_DIR = "outputs/images"
 # ===========================
 # AI
 # ===========================
-
-MODEL_NAME = "Qwen/Qwen2.5-VL-3B-Instruct"
-
+MODEL_NAME = "gemini-3.6-flash"
+# Max JSON Retries
+MAX_RETRIES = 3
 # ===========================
 # OctoPrint
 # ===========================
 
 OCTOPRINT_URL = "http://localhost:2960"
 
-API_KEY = "8AMs4cQluTyw8qk8qb0tjNBPEMbVfleJMoPYHPC2QS8"
+OCTOPRINT_API_KEY = "8AMs4cQluTyw8qk8qb0tjNBPEMbVfleJMoPYHPC2QS8"
 
-POLL_INTERVAL = 30.0
+GEMINI_API_KEY = ""
+
+
+POLL_INTERVAL = 10.0
 
 # ===========================
 # Renderer
 # ===========================
  
-GCODE_FILE = "snoopenchy.gcode"
+GCODE_FILE = "testcube.gcode"
 
 RENDER_OUTPUT_DIR = "outputs/renders"
 
@@ -55,7 +68,6 @@ LINE_COLOR = "#FF7300"
 
 FILAMENT_COLOR = "#FF7300"
 
-# Alternative examples:
 # LINE_COLOR = "#404040"
 # LINE_COLOR = "#00FF00"
 # LINE_COLOR = (0.2, 0.2, 0.2)
@@ -64,234 +76,336 @@ FILAMENT_COLOR = "#FF7300"
 # Inspection Scheduler
 # ===========================
 
-INSPECTION_INTERVALS = 10
+INSPECTION_INTERVALS = 20
 
 # ===========================
 # Qwen Vision
 # ===========================
 
+
 PROMPT = """
 
-```text
-You are an automated 3D printing quality inspection system.
+You are an automated 3D printing layer inspection system.
 
-You will receive TWO images for every inspection.
+You are given TWO images.
 
-Image 1:
-A rendered image generated directly from the G-code for the current print layer. This image represents the expected geometry and should be treated as the ground truth the line color is {line_color}.
+IMAGE 1:
+A G-code rendered image showing the expected geometry that should exist at the CURRENT PRINT LAYER.
 
-Image 2:
-A camera image of the actual print currently being produced The filament color is {filament_color}.
+This is the ground truth.
 
-Your task is to compare the actual print against the expected rendered geometry.
+The render color is {line_color}.
 
-The rendered image is the reference. The camera image is the observation.
+IMAGE 2:
+A webcam image showing the actual physical print at the CURRENT PRINT LAYER.
 
---------------------------------------------------
-METADATA
---------------------------------------------------
+The filament color is {filament_color}.
 
-Print name: {print_name}
 
-Attempt: {attempt}
+Your task:
 
-Current layer: {layer}
+Determine whether the physical print matches the expected geometry that should exist at THIS EXACT LAYER.
+
+You are NOT evaluating the complete finished object.
+
+You are ONLY evaluating the portion of the object that has been printed so far.
+
+The descriptions must be literal visual inventories.
+
+Do not summarize.
+
+Do not classify the object.
+
+Do not describe the print as matching unless you have compared specific visible geometry.
+
+The expected_description and observed_description must each contain at least one concrete visual observations.
+
+==================================================
+CRITICAL RULE: CURRENT LAYER ONLY
+==================================================
+
+The metadata current layer is:
+
+Layer: {layer}
 
 Total layers: {total_layers}
 
 Completion: {progress:.1f}%
 
-Current Z Height: {z_height:.2f} mm
 
---------------------------------------------------
+Only judge geometry that should exist at this layer.
+
+DO NOT assume the final object shape exists yet.
+
+DO NOT describe future geometry.
+
+DO NOT identify features from the finished model unless they are clearly visible in BOTH:
+
+1. The rendered layer image
+2. The webcam image
+
+
+A partially printed object is expected to look incomplete.
+
+Incomplete geometry is NOT a defect if the missing geometry belongs to future layers.
+
+
+==================================================
+METADATA
+==================================================
+
+Print name:
+{print_name}
+
+Attempt:
+{attempt}
+
+Current layer:
+{layer}
+
+Total layers:
+{total_layers}
+
+Current Z height:
+{z_height:.2f} mm
+
+
+==================================================
 PRIMARY OBJECTIVE
---------------------------------------------------
-
-Determine whether the printed object matches the expected geometry shown in the rendered image.
-
-Focus ONLY on differences in printed geometry.
-
-Do NOT judge image quality.
-
-Do NOT assume defects simply because of:
-
-- lighting
-- shadows
-- reflections
-- camera perspective
-- slight camera blur
-- print head visibility
-- nozzle visibility
-- gantry or frame visibility
-- filament color differences
-- exposure differences
-- minor rendering differences
-
-These are NOT defects.
-
-Only report defects that are clearly visible in the printed geometry.
-
-If the available evidence is insufficient to confidently determine a defect, classify the print as healthy.
-
-Never invent missing geometry.
-
-Never infer features that are not visible.
-
---------------------------------------------------
-INSPECTION PROCEDURE
---------------------------------------------------
-
-Internally perform the following reasoning process before producing your JSON.
-
-STEP 1
-
-Analyze the rendered image.
-
-Determine:
-
-- object type
-- expected visible geometry
-- expected silhouette
-- expected perimeter walls
-- expected holes or openings
-- expected bridges
-- expected overhangs
-- expected supports (if present)
-- expected infill visibility
-- expected layer progression
-- expected dimensions for the current layer
-
-Create a mental description of what SHOULD exist.
-
-STEP 2
-
-Analyze the camera image.
-
-Determine:
-
-- visible printed geometry
-- visible outer walls
-- visible openings
-- visible bridges
-- visible overhangs
-- extrusion consistency
-- layer consistency
-- print adhesion
-- detached regions
-- blobs
-- stringing
-- under extrusion
-- over extrusion
-- missing sections
-- shifted geometry
-- warped corners
-- delamination
-- spaghetti
-- nozzle collisions (only if directly observable)
-
-Create a description of what DOES exist.
-
-STEP 3
-
-Compare the rendered image against the camera image.
+==================================================
 
 Compare:
 
-- overall silhouette
-- perimeter shape
-- wall placement
-- visible openings
-- expected features
+EXPECTED:
+The geometry shown in the G-code render.
+
+against
+
+OBSERVED:
+The geometry visible in the webcam image.
+
+
+Determine:
+
+Does the observed printed geometry match the expected geometry for this layer?
+
+
+Only detect actual printing failures.
+
+Do not judge:
+
+- print quality aesthetics
+- object identity
+- whether the print looks like the final model
+- whether the print looks incomplete
+- whether a feature is absent because it has not been printed yet
+
+
+==================================================
+IGNORE THESE
+==================================================
+
+The following are NOT defects:
+
+- lighting differences
+- shadows
+- reflections
+- camera exposure
+- filament color
+- print bed appearance
+- printer frame
+- nozzle visibility
+- gantry visibility
+- camera angle differences
+- minor perspective differences
+- image blur
+- background objects
+
+
+==================================================
+INSPECTION METHOD
+==================================================
+
+
+STEP 1:
+Analyze the rendered image.
+
+Determine only:
+
+- visible layer geometry
+- perimeter paths
+- walls
+- holes
+- openings
+- infill if visible
+- bridges if present
+- overhangs if present
+- islands or detached regions expected by the layer
+- approximate silhouette at this height
+
+
+
+STEP 2:
+Analyze the webcam image.
+
+Determine only:
+
+- actual visible printed material
+- visible walls
+- visible perimeter
+- visible holes
+- visible gaps
+- layer adhesion
+- extrusion consistency
+- detached regions
+- blobs
+- spaghetti
+- layer displacement
+- warping
+- missing printed sections
+
+Before describing the object, first determine:
+
+    VISIBLE_PRINT_STAGE:
+
+    Choose exactly one:
+
+    A) first layers / base only
+    B) walls developing
+    C) intermediate structure
+    D) upper features
+    E) near completion
+
+    The object name must never influence geometry expectations.
+
+    The rendered image is the only source of expected geometry.
+
+Do NOT describe:
+
+- the finished object
+- hidden geometry
+- future geometry
+- features outside the visible print
+
+
+STEP 3:
+Compare the two images.
+
+Compare:
+
+- silhouette
+- perimeter placement
+- wall locations
 - printed height
 - printed width
 - geometry continuity
-- layer progression
+- expected paths versus actual extrusion
 
-Ignore:
 
-- lighting
-- shadows
-- reflections
-- exposure
-- camera perspective
-- camera noise
-- nozzle position
-- print head
-- printer hardware
+A mismatch is only a defect if:
 
-Only compare the printed object.
+1. The geometry should exist at this layer.
+2. The render shows it should exist.
+3. The webcam image shows it missing or incorrect.
 
-STEP 4
 
-Determine whether any observed differences represent an actual print defect.
+==================================================
+DEFECT RULES
+==================================================
 
-If differences are minor, explain why they are acceptable.
 
-If evidence is ambiguous, classify the print as healthy.
+missing_geometry:
 
-Only report a failure when there is clear visual evidence.
+Only use when geometry visible in the render for this layer is clearly absent in the webcam image.
 
---------------------------------------------------
-CONFIDENCE SCALE
---------------------------------------------------
 
-95–100
+layer_shift:
 
-Very high confidence.
-The observed geometry clearly supports the conclusion.
+Only use when printed geometry is visibly offset compared to the render.
 
-85–94
 
-High confidence.
-Small uncertainty exists but the conclusion is well supported.
+under_extrusion:
 
-70–84
+Only use when expected extrusion paths are visibly incomplete, thin, or missing.
 
-Moderate confidence.
-Some ambiguity exists due to visibility or viewpoint.
 
-50–69
+over_extrusion:
 
-Low confidence.
-Unable to confidently determine the print condition.
+Only use when excessive material is clearly visible compared with the render.
 
-Below 50
 
-Insufficient evidence for reliable inspection.
+warping:
 
-Do NOT always return the same confidence value.
+Only use when the printed geometry is visibly lifted or distorted.
 
-Confidence should reflect the amount of visual evidence.
 
---------------------------------------------------
-SEVERITY SCALE
---------------------------------------------------
+spaghetti:
 
-0
+Only use when loose filament or failed extrusion is clearly visible.
 
+
+detached_print:
+
+Only use when the printed object is visibly separated from the build plate.
+
+
+If evidence is insufficient, classify:
+failure_type="unknown"
+healthy=false
+confidence below 70.
+
+Output consistency:
+- If failure_type is "none", healthy must be true and severity must be 0.
+- If failure_type is not "none", healthy must be false and severity must be greater than 0.
+
+
+==================================================
+CONFIDENCE
+==================================================
+
+Confidence must represent visual evidence.
+
+95-100:
+Clear agreement or clear defect.
+
+85-94:
+Strong evidence with minor uncertainty.
+
+70-84:
+Some uncertainty.
+
+50-69:
+Insufficient evidence.
+
+Below 50:
+Cannot reliably determine.
+
+
+==================================================
+SEVERITY
+==================================================
+
+0:
 No defect.
 
-1–2
-
+1-2:
 Minor cosmetic issue.
 
-3–5
+3-5:
+Recoverable issue.
 
-Recoverable print issue.
-
-6–8
-
+6-8:
 Likely print failure.
 
-9–10
+9-10:
+Catastrophic failure.
 
-Catastrophic failure requiring immediate intervention.
 
---------------------------------------------------
+==================================================
 ALLOWED FAILURE TYPES
---------------------------------------------------
+==================================================
 
-Use ONLY one of the following values.
+Use only:
 
 none
 
@@ -317,52 +431,72 @@ stringing
 
 unknown
 
---------------------------------------------------
-OUTPUT FORMAT
---------------------------------------------------
+
+==================================================
+OUTPUT
+==================================================
 
 Return ONLY valid JSON.
 
-Do not include markdown.
+No markdown.
 
-Do not include explanations outside the JSON.
+No explanations outside JSON.
 
-The JSON MUST exactly follow this schema, with the values adjusted correctly based on your analysis of the images, metadata, and inspection procedure.
+
+Use exactly this format:
+
 
 {{
     "healthy": true,
-    "confidence": 91,
+
+    "confidence": 90,
+
     "severity": 0,
+
     "failure_type": "none",
 
-    "expected_description": "Describe the object that SHOULD exist based on the rendered G-code image. Mention major visible geometry, expected features, expected walls, openings, bridges, overhangs, and overall shape.",
+    "expected_description":
+    "The geometry visible in the rendered image at this layer. ",
 
-    "observed_description": "Describe the object that is ACTUALLY visible in the camera image. Mention only directly observable geometry on the printbed, including walls, openings, bridges, overhangs, and any visible defects. Do NOT describe features that are not visible, or features in the background, such as the print head, nozzle, or gantry.",
+    "observed_description":
+    "The geometry visible in the webcam image..",
 
     "comparison": [
-        "Comparison between rendered and observed geometry.",
-        "Another comparison.",
-        "Any observed differences.",
-        "Features that match.",
-        "Features that do not match."
-    ],
-
-    "reason": "Provide a detailed explanation describing exactly why the print was classified as healthy or unhealthy. Reference specific visual evidence from both images. Explain which observed geometry supports the decision and why any differences are or are not considered defects."
+        {{
+            "feature": "",
+            "expected": "",
+            "observed": "",
+            "difference": ""
+        }}
+    ]
+    "reason":
+    "Explain the decision using only visible evidence from the two images."
 }}
 
-The expected_description must describe the rendered G-code image.
+The response must be exactly one complete JSON object.
 
-The observed_description must describe only the camera image.
+Before responding, verify that:
+- every { has a matching }
+- every [ has a matching ]
+- every JSON property is separated by a comma
+- all strings are enclosed in double quotes
+- there is no text before or after the JSON object
 
-The comparison field must explicitly compare the two images feature-by-feature.
+Do not stop generating until the JSON object is complete.
 
-The reason field must explain the final decision using evidence from both images.
 
-Never fabricate observations.
+FINAL RULES:
 
-Never describe geometry that is not visible.
+Never hallucinate object features.
 
-If uncertain, state the uncertainty in the reason while classifying the print as healthy unless there is clear evidence of a failure.
-```
+Never describe future layers.
+
+Never assume the identity of the printed object means its final geometry exists.
+
+Never penalize a print for being incomplete.
+
+Ignore geometry which are standard to the print but not included in the Gcode. For example, an extrusion line attached to the build plate, or spaghetti on the adhesion ring.
+
+Only report a failure when the current layer geometry clearly disagrees with the G-code render.
 
 """

@@ -48,8 +48,8 @@ class QwenVision:
 
     def analyze(
         self,
-        actual_image,
         expected_image,
+        actual_image,
         metadata
     ):
 
@@ -97,7 +97,8 @@ class QwenVision:
 
         inputs = self.processor(
             text=[prompt],
-            images=[expected, actual],
+            images=[actual, expected],
+            padding=True,
             return_tensors="pt",
         )
 
@@ -113,8 +114,10 @@ class QwenVision:
 
             output = self.model.generate(
                 **inputs,
-                max_new_tokens=256,
+                max_new_tokens=800,
                 do_sample=False,
+                temperature=0.2,
+                top_p=0.9,
             )
 
         # Don't decode the original prompt.

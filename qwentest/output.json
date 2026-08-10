@@ -1,0 +1,23 @@
+{
+    "healthy": false,
+    "confidence": 85,
+    "severity": 7,
+    "failure_type": "layer_shift",
+    "expected_description": "Render indicates object geometry positioned on the right side with structured layer paths.",
+    "observed_description": "Physical object is shifted to the left with extensive drooping filament loops and misaligned layers.",
+    "comparison": [
+        {
+            "feature": "Placement",
+            "expected": "Positioned towards right frame boundary.",
+            "observed": "Located in left-center frame region.",
+            "difference": "Significant horizontal position displacement."
+        },
+        {
+            "feature": "Extrusion Structure",
+            "expected": "Clean perimeters and solid layer adhesion.",
+            "observed": "Loose, dangling strands and unattached loops beneath overhangs.",
+            "difference": "Unsupported extrusion and loose filament debris."
+        }
+    ],
+    "reason": "The print shows a major positional shift compared to the G-code render alongside severe filament sagging and spaghetti."
+}
