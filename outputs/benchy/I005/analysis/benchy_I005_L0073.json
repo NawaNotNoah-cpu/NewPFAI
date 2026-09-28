@@ -1,0 +1,7 @@
+{
+    "healthy": true,
+    "confidence": 96,
+    "severity": 0,
+    "failure_type": "none",
+    "reason": "Matches expected geometry."
+}

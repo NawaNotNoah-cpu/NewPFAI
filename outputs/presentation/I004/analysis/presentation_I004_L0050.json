@@ -1,0 +1,17 @@
+{
+    "healthy": true,
+    "confidence": 85,
+    "severity": 0,
+    "failure_type": "none",
+    "expected_description": "Solid rectangular block geometry with extended base brim.",
+    "observed_description": "Orange rectangular printed block on the build surface.",
+    "comparison": [
+        {
+            "feature": "Main body silhouette",
+            "expected": "Rectangular block profile",
+            "observed": "Rectangular block profile",
+            "difference": "None visible"
+        }
+    ],
+    "reason": "The physical print profile matches the expected geometry rendered for this layer."
+}

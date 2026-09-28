@@ -1,0 +1,17 @@
+{
+    "healthy": true,
+    "confidence": 95,
+    "severity": 0,
+    "failure_type": "none",
+    "expected_description": "An orange rectangular block in the center with thin horizontal brim extensions on the left and right sides.",
+    "observed_description": "An orange printed object on the build plate consisting of a central rectangular block surrounded by a thin orange brim.",
+    "comparison": [
+        {
+            "feature": "Central block and brim",
+            "expected": "A central rectangular block with thin horizontal brim extensions.",
+            "observed": "A matching central rectangular block with a thin brim on the build plate.",
+            "difference": "None. The printed geometry matches the G-code render."
+        }
+    ],
+    "reason": "The printed orange object matches the expected geometry from the G-code render, showing a well-adhered central block and surrounding brim with no visible defects."
+}

@@ -1,0 +1,17 @@
+{
+    "healthy": true,
+    "confidence": 85,
+    "severity": 0,
+    "failure_type": "none",
+    "expected_description": "A flat, wide orange base structure with a slightly raised central section.",
+    "observed_description": "A low-profile orange printed layer on the build plate matching the expected base shape.",
+    "comparison": [
+        {
+            "feature": "Base profile",
+            "expected": "Flat horizontal base with a raised center.",
+            "observed": "Flat orange print matching the expected width and height.",
+            "difference": "None"
+        }
+    ],
+    "reason": "The printed material on the bed matches the expected low-profile base geometry shown in the render."
+}

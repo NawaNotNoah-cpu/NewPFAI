@@ -1,0 +1,17 @@
+{
+    "healthy": false,
+    "confidence": 80,
+    "severity": 5,
+    "failure_type": "layer_shift",
+    "expected_description": "Uniform rectangular silhouette with straight vertical outer walls and a flat base brim.",
+    "observed_description": "Orange printed object displaying a distinct lateral displacement towards the right near the upper region.",
+    "comparison": [
+        {
+            "feature": "Outer wall alignment",
+            "expected": "Straight vertical perimeter profile",
+            "observed": "Upper layers shifted horizontally relative to lower layers",
+            "difference": "Visible horizontal offset along the Z-axis"
+        }
+    ],
+    "reason": "The physical print exhibits a visible layer shift near the top, deviating from the straight vertical profile shown in the render."
+}

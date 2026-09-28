@@ -1,0 +1,17 @@
+{
+    "healthy": false,
+    "confidence": 88,
+    "severity": 7,
+    "failure_type": "missing_geometry",
+    "expected_description": "An orange silhouette of a boat-like structure showing a hull, deck, and vertical cabin pillars.",
+    "observed_description": "An empty black print bed with no printed material. A blue block with an 'M' logo is visible in the background.",
+    "comparison": [
+        {
+            "feature": "Main print geometry",
+            "expected": "A boat-shaped structure printed on the bed.",
+            "observed": "No printed material on the build plate.",
+            "difference": "The expected object is completely missing from the print surface."
+        }
+    ],
+    "reason": "The G-code render expects a boat-shaped layer to be printed, but the webcam image shows an empty print bed with no object present."
+}

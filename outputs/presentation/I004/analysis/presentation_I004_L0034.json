@@ -1,0 +1,17 @@
+{
+    "healthy": true,
+    "confidence": 85,
+    "severity": 0,
+    "failure_type": "none",
+    "expected_description": "Rectangular solid layer section with a wide brim base.",
+    "observed_description": "Solid orange rectangular printed mass attached to bed.",
+    "comparison": [
+        {
+            "feature": "Outer profile",
+            "expected": "Rectangular layer slice",
+            "observed": "Rectangular layer slice",
+            "difference": "None"
+        }
+    ],
+    "reason": "Printed object matches rendered geometry profile without visible extrusion or adhesion issues."
+}

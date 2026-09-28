@@ -1,0 +1,17 @@
+{
+    "healthy": true,
+    "confidence": 88,
+    "severity": 0,
+    "failure_type": "none",
+    "expected_description": "A wide flat base with a raised central rectangular block in orange.",
+    "observed_description": "An orange printed object on the bed with a flat brim and a central raised section matching the render.",
+    "comparison": [
+        {
+            "feature": "Central raised block",
+            "expected": "Raised rectangular profile in the center.",
+            "observed": "Raised block in the center.",
+            "difference": "None."
+        }
+    ],
+    "reason": "The printed geometry matches the expected profile of a central raised block with a flat brim."
+}

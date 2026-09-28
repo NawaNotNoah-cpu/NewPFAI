@@ -1,0 +1,17 @@
+{
+    "healthy": true,
+    "confidence": 95,
+    "severity": 0,
+    "failure_type": "none",
+    "expected_description": "A side-profile render showing a wide, thin base layer with a central rectangular block rising vertically.",
+    "observed_description": "An orange printed object on the build plate, featuring a thin brim at the base and a central rectangular block structure matching the height of the render.",
+    "comparison": [
+        {
+            "feature": "Overall profile",
+            "expected": "A central rectangular block with a wide flat brim at the base.",
+            "observed": "A central rectangular block with a wide flat brim at the base.",
+            "difference": "None"
+        }
+    ],
+    "reason": "The printed orange geometry matches the expected profile from the G-code render perfectly, with no signs of warping, layer shifting, or extrusion issues."
+}

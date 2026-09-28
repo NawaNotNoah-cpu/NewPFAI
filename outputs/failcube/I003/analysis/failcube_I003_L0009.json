@@ -1,0 +1,17 @@
+{
+    "healthy": true,
+    "confidence": 95,
+    "severity": 0,
+    "failure_type": "none",
+    "expected_description": "A central raised rectangular block with thin horizontal wings extending symmetrically to the left and right.",
+    "observed_description": "An orange printed object on the build plate featuring a central raised rectangular section and thin horizontal wings extending to the left and right, matching the expected profile.",
+    "comparison": [
+        {
+            "feature": "Overall profile",
+            "expected": "A central raised block with thin side wings.",
+            "observed": "A central raised block with thin side wings.",
+            "difference": "None"
+        }
+    ],
+    "reason": "The printed geometry matches the G-code render perfectly. The central raised block and the thin side wings are clearly visible and correctly proportioned."
+}

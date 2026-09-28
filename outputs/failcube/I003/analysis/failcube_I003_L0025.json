@@ -1,0 +1,17 @@
+{
+    "healthy": true,
+    "confidence": 88,
+    "severity": 0,
+    "failure_type": "none",
+    "expected_description": "A central rectangular block with thin horizontal brim extensions on both sides.",
+    "observed_description": "An orange rectangular block printed on the bed with a visible brim around it.",
+    "comparison": [
+        {
+            "feature": "Main body",
+            "expected": "Solid rectangular profile with side brims.",
+            "observed": "Solid rectangular profile with side brims.",
+            "difference": "None."
+        }
+    ],
+    "reason": "The printed geometry matches the expected rectangular profile and brim shown in the render."
+}

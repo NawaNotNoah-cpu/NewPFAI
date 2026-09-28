@@ -1,0 +1,17 @@
+{
+    "healthy": true,
+    "confidence": 88,
+    "severity": 0,
+    "failure_type": "none",
+    "expected_description": "A solid orange rectangular block with a flat top and a thin horizontal brim extending from the base.",
+    "observed_description": "An orange rectangular block printed on the build plate, matching the expected shape and height.",
+    "comparison": [
+        {
+            "feature": "Main body shape",
+            "expected": "Rectangular block",
+            "observed": "Rectangular block",
+            "difference": "None"
+        }
+    ],
+    "reason": "The printed orange block matches the expected rectangular geometry and brim shown in the render."
+}

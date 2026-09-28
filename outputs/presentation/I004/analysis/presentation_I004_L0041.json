@@ -1,0 +1,17 @@
+{
+    "healthy": true,
+    "confidence": 85,
+    "severity": 0,
+    "failure_type": "none",
+    "expected_description": "Solid orange rectangular block profile with a brim base.",
+    "observed_description": "Solid orange printed block resting on the build plate beneath nozzle.",
+    "comparison": [
+        {
+            "feature": "overall geometry",
+            "expected": "rectangular block silhouette",
+            "observed": "matching rectangular orange shape",
+            "difference": "none"
+        }
+    ],
+    "reason": "The observed printed block aligns with the rendered layer geometry without defects."
+}

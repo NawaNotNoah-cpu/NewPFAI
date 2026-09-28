@@ -1,0 +1,17 @@
+{
+    "healthy": true,
+    "confidence": 85,
+    "severity": 0,
+    "failure_type": "none",
+    "expected_description": "A low-profile horizontal orange layer with a slightly raised central stepped section.",
+    "observed_description": "An orange printed base layer deposited flat on the print surface under the nozzle.",
+    "comparison": [
+        {
+            "feature": "Layer Profile",
+            "expected": "Flat horizontal layer with stepped center.",
+            "observed": "Flat orange extrusion on the build plate.",
+            "difference": "None observed."
+        }
+    ],
+    "reason": "The extruded filament geometry matches the location and silhouette specified by the G-code render."
+}

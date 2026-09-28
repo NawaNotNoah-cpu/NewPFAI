@@ -1,0 +1,17 @@
+{
+    "healthy": true,
+    "confidence": 95,
+    "severity": 0,
+    "failure_type": "none",
+    "expected_description": "A solid orange rectangular block profile representing a cylinder or cube, with a thin horizontal brim extending from the base.",
+    "observed_description": "An orange cylindrical printed object on the build plate with smooth vertical walls and a visible brim at the base, matching the height and shape of the render.",
+    "comparison": [
+        {
+            "feature": "Overall geometry",
+            "expected": "A solid rectangular block profile with a brim at the base.",
+            "observed": "A solid orange cylindrical object with a brim at the base.",
+            "difference": "None. The printed geometry matches the expected render perfectly."
+        }
+    ],
+    "reason": "The printed object matches the expected geometry in height, width, and shape. The walls are smooth and vertical, and the brim is present at the base. No defects are visible."
+}

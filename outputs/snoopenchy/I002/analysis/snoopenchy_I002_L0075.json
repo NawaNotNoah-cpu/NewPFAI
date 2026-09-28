@@ -1,0 +1,17 @@
+{
+    "healthy": true,
+    "confidence": 88,
+    "severity": 0,
+    "failure_type": "none",
+    "expected_description": "An orange profile showing a curved left edge with a small circular opening near the top, a flat bottom, a central vertical column, and a stepped rear section on the right.",
+    "observed_description": "An orange printed object on a grey bed, featuring a curved left side, a central vertical column, and a stepped rear section matching the profile.",
+    "comparison": [
+        {
+            "feature": "Overall profile",
+            "expected": "Curved left edge and stepped right edge.",
+            "observed": "Curved left edge and stepped right edge match.",
+            "difference": "None."
+        }
+    ],
+    "reason": "The printed orange geometry matches the expected profile from the render, with no visible defects like warping or layer shifts."
+}

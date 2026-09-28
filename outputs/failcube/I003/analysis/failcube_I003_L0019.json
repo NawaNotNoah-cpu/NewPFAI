@@ -1,0 +1,17 @@
+{
+    "healthy": true,
+    "confidence": 95,
+    "severity": 0,
+    "failure_type": "none",
+    "expected_description": "A G-code render showing a side profile of a printed object with a central raised rectangular block and a thin brim extending horizontally on both sides.",
+    "observed_description": "An orange 3D printed object on the build plate, showing a central raised rectangular block and a thin brim extending horizontally, matching the expected profile. The print head is positioned directly above the object.",
+    "comparison": [
+        {
+            "feature": "Overall profile",
+            "expected": "A central raised rectangular block with a thin brim on both sides.",
+            "observed": "A central raised rectangular block with a thin brim on both sides.",
+            "difference": "None. The printed geometry matches the expected render."
+        }
+    ],
+    "reason": "The printed orange object matches the expected geometry shown in the G-code render, featuring a central raised block and a thin brim. No defects are visible."
+}

@@ -1,0 +1,17 @@
+{
+    "healthy": false,
+    "confidence": 95,
+    "severity": 6,
+    "failure_type": "spaghetti",
+    "expected_description": "A solid, clean rectangular block with straight vertical walls and a flat, well-defined top surface, surrounded by a thin brim at the base.",
+    "observed_description": "An orange rectangular block is visible on the build plate. The top of the block is messy and uneven, with loose, un-adhered loops of orange filament (spaghetti) resting on top of the print and trailing off to the right side of the build plate.",
+    "comparison": [
+        {
+            "feature": "Top surface geometry",
+            "expected": "A flat, solid, and clean top layer of the rectangular block.",
+            "observed": "Loose, chaotic loops of extruded filament on top of the block and trailing off to the right.",
+            "difference": "Extruded filament is not adhering to the layer, resulting in loose spaghetti strands."
+        }
+    ],
+    "reason": "The webcam image clearly shows loose, un-adhered loops of filament (spaghetti) on top of the printed block and trailing off to the right, which is not present in the clean G-code render."
+}

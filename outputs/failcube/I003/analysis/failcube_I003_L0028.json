@@ -1,0 +1,17 @@
+{
+    "healthy": false,
+    "confidence": 85,
+    "severity": 5,
+    "failure_type": "spaghetti",
+    "expected_description": "A solid orange central block with a thin, flat horizontal brim extending to both sides.",
+    "observed_description": "An orange block on the build plate with loose, un-adhered loops of filament on the right side.",
+    "comparison": [
+        {
+            "feature": "Right brim structure",
+            "expected": "A flat, solid horizontal brim extending to the right.",
+            "observed": "Loose, loopy filament strands hanging off the right side.",
+            "difference": "The filament failed to form a solid brim, resulting in loose loops."
+        }
+    ],
+    "reason": "The right side of the print shows loose, un-adhered filament loops instead of the solid brim shown in the render."
+}

@@ -1,0 +1,17 @@
+{
+    "healthy": false,
+    "confidence": 88,
+    "severity": 7,
+    "failure_type": "detached_print",
+    "expected_description": "A single, flat, horizontal orange line segment representing a base layer.",
+    "observed_description": "A large, distorted orange 3D structure that is detached from the print bed, leaning, and surrounded by loose filament strands.",
+    "comparison": [
+        {
+            "feature": "Print alignment and adhesion",
+            "expected": "Flat base layer adhered to the build plate.",
+            "observed": "Highly distorted, detached 3D mass sliding off the bed.",
+            "difference": "Complete detachment and structural collapse."
+        }
+    ],
+    "reason": "The printed object has completely detached from the build plate, resulting in a collapsed, distorted mass that does not match the expected flat base layer."
+}

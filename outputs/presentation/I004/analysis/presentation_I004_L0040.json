@@ -1,0 +1,17 @@
+{
+    "healthy": true,
+    "confidence": 85,
+    "severity": 0,
+    "failure_type": "none",
+    "expected_description": "Solid rectangular silhouette resting on a brim extension layer.",
+    "observed_description": "Solid orange block extrusion positioned on the print bed under the nozzle.",
+    "comparison": [
+        {
+            "feature": "Block silhouette",
+            "expected": "Rectangular cross-section at current layer height.",
+            "observed": "Matching orange rectangular extrusion on bed.",
+            "difference": "None observed."
+        }
+    ],
+    "reason": "The printed shape matches the rendered layer geometry without visible defects or layer displacement."
+}

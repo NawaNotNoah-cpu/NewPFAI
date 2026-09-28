@@ -1,0 +1,17 @@
+{
+    "healthy": true,
+    "confidence": 85,
+    "severity": 0,
+    "failure_type": "none",
+    "expected_description": "A solid rectangular central block with a thin extended brim base.",
+    "observed_description": "A solid orange printed block positioned centrally under the extruder head.",
+    "comparison": [
+        {
+            "feature": "Block silhouette",
+            "expected": "Rectangular profile at current Z-height.",
+            "observed": "Matching orange rectangular printed mass.",
+            "difference": "None."
+        }
+    ],
+    "reason": "The physical print matches the expected geometry in silhouette and location with no visible defects."
+}

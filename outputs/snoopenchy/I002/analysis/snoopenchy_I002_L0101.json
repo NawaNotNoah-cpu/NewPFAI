@@ -1,0 +1,17 @@
+{
+    "healthy": false,
+    "confidence": 90,
+    "severity": 8,
+    "failure_type": "spaghetti",
+    "expected_description": "A solid orange side profile of a boat hull with vertical pillars and a flat deck line.",
+    "observed_description": "An orange printed object on the bed with extensive loose, loopy filament strands floating in the air.",
+    "comparison": [
+        {
+            "feature": "Extrusion path",
+            "expected": "Clean, solid layers forming the boat structure.",
+            "observed": "Loose, un-adhered loops of filament floating above and around the print.",
+            "difference": "Severe spaghetti failure with loose filament strands."
+        }
+    ],
+    "reason": "The webcam image shows a large amount of loose, un-adhered filament loops floating in the air, indicating a catastrophic print failure."
+}

@@ -1,0 +1,17 @@
+{
+    "healthy": false,
+    "confidence": 80,
+    "severity": 4,
+    "failure_type": "missing_geometry",
+    "expected_description": "A uniform rectangular block profile situated on a wide flat brim.",
+    "observed_description": "An orange printed object featuring stepped sides and a distinct overhang protrusion on the upper right.",
+    "comparison": [
+        {
+            "feature": "Silhouette",
+            "expected": "Straight vertical side walls forming a rectangular profile",
+            "observed": "Non-vertical profile with overhangs on the right side",
+            "difference": "Observed perimeter does not match the rendered rectangular geometry"
+        }
+    ],
+    "reason": "The observed printed silhouette contains overhangs and geometry variations not present in the rendered reference."
+}

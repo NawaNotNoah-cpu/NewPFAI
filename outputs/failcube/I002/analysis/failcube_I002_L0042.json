@@ -1,0 +1,17 @@
+{
+    "healthy": true,
+    "confidence": 88,
+    "severity": 0,
+    "failure_type": "none",
+    "expected_description": "A solid rectangular block profile with a thin horizontal brim extending from the base.",
+    "observed_description": "An orange cylindrical block printed on the bed with a visible brim around its base.",
+    "comparison": [
+        {
+            "feature": "Main body silhouette",
+            "expected": "Rectangular block profile of specific height and width.",
+            "observed": "Matching orange block structure under the nozzle.",
+            "difference": "None."
+        }
+    ],
+    "reason": "The printed geometry matches the expected shape and height shown in the render with no visible defects."
+}

@@ -1,0 +1,17 @@
+{
+    "healthy": true,
+    "confidence": 78,
+    "severity": 0,
+    "failure_type": "none",
+    "expected_description": "Render shows a central solid rectangular profile resting on a wider base perimeter.",
+    "observed_description": "Webcam view shows an orange block structure printed on the bed beneath the printhead.",
+    "comparison": [
+        {
+            "feature": "Main Body Geometry",
+            "expected": "Vertical solid block silhouette at current height.",
+            "observed": "Matching vertical orange block structure.",
+            "difference": "None observed."
+        }
+    ],
+    "reason": "The observed object matches the height, width, and outline depicted in the G-code render."
+}

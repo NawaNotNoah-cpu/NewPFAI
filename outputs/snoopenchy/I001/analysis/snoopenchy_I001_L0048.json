@@ -1,0 +1,17 @@
+{
+    "healthy": true,
+    "confidence": 85,
+    "severity": 0,
+    "failure_type": "none",
+    "expected_description": "An orange side-profile silhouette of a boat hull. It features a sloped bow on the left, a flat central deck area, and a lower stern on the right.",
+    "observed_description": "An orange printed object on the build plate. The profile shows a sloped bow on the left, a flat middle section, and a stern on the right, matching the expected shape.",
+    "comparison": [
+        {
+            "feature": "Hull profile",
+            "expected": "Sloped bow on left, flat deck in middle, stern on right.",
+            "observed": "Matches the expected profile shape and proportions.",
+            "difference": "None."
+        }
+    ],
+    "reason": "The printed object's profile matches the G-code render perfectly at this layer height with no visible defects."
+}

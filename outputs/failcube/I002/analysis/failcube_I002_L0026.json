@@ -1,0 +1,17 @@
+{
+    "healthy": true,
+    "confidence": 95,
+    "severity": 0,
+    "failure_type": "none",
+    "expected_description": "A solid orange rectangular block in the center with a thin horizontal brim extending outwards on both the left and right sides.",
+    "observed_description": "An orange rectangular block printed on the build plate, with a visible brim on the bed. The print head is positioned directly above the top layer of the block.",
+    "comparison": [
+        {
+            "feature": "Central block geometry",
+            "expected": "A solid rectangular block of orange material.",
+            "observed": "A solid rectangular block of orange material matching the expected shape.",
+            "difference": "None."
+        }
+    ],
+    "reason": "The printed orange block matches the expected rectangular geometry and proportions shown in the G-code render. The brim is also present and well-adhered to the build plate. No defects are visible."
+}

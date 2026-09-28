@@ -1,8 +1,5 @@
 testslope.gcode
 /__pycache__
-/outputs
-/outputs
-/outputs
 /printer/__pycache__
 /renderer/__pycache__
 /scheduler/__pycache__

@@ -1,0 +1,17 @@
+{
+    "healthy": true,
+    "confidence": 90,
+    "severity": 0,
+    "failure_type": "none",
+    "expected_description": "An orange side-profile silhouette of a boat-like structure. It features a sloped bow on the left, a raised central cabin section, and a lower stern on the right.",
+    "observed_description": "An orange 3D printed object on a grey build plate. The profile shows a sloped bow on the left and a developing cabin structure in the center, matching the expected shape.",
+    "comparison": [
+        {
+            "feature": "Overall profile",
+            "expected": "Sloped bow on the left, flat bottom, and raised central section.",
+            "observed": "Matches the expected sloped bow and central section height.",
+            "difference": "None visible."
+        }
+    ],
+    "reason": "The printed orange geometry matches the expected G-code render profile for this layer height without any visible defects."
+}

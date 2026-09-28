@@ -1,0 +1,17 @@
+{
+    "healthy": true,
+    "confidence": 90,
+    "severity": 0,
+    "failure_type": "none",
+    "expected_description": "A flat orange profile with a raised central rectangular section and two lower, thinner wings extending to the left and right.",
+    "observed_description": "An orange printed object on the build plate, showing a raised central section and lower side wings, matching the expected profile.",
+    "comparison": [
+        {
+            "feature": "Overall profile shape",
+            "expected": "A central raised block with lower wings on both sides.",
+            "observed": "A central raised block with lower wings on both sides, matching the render.",
+            "difference": "None."
+        }
+    ],
+    "reason": "The printed geometry on the build plate matches the expected G-code render profile perfectly, with no signs of warping, layer shifting, or extrusion issues."
+}

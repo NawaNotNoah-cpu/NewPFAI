@@ -1,0 +1,17 @@
+{
+    "healthy": false,
+    "confidence": 92,
+    "severity": 7,
+    "failure_type": "spaghetti",
+    "expected_description": "A single flat horizontal orange line with a slightly thicker middle section.",
+    "observed_description": "A large, distorted three-dimensional orange structure with hollow loops and loose filament strands.",
+    "comparison": [
+        {
+            "feature": "Overall geometry",
+            "expected": "A flat, two-dimensional horizontal line.",
+            "observed": "A tall, warped, three-dimensional mass with loose strands.",
+            "difference": "The printed object is completely deformed and does not match the flat layer profile."
+        }
+    ],
+    "reason": "The expected render shows a flat, single-layer line, but the webcam shows a large, failed three-dimensional mass with loose spaghetti filament."
+}

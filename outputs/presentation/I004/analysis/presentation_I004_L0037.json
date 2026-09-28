@@ -1,0 +1,17 @@
+{
+    "healthy": true,
+    "confidence": 75,
+    "severity": 0,
+    "failure_type": "none",
+    "expected_description": "A rectangular central block profile on a wide brim base.",
+    "observed_description": "An orange rectangular printed object sitting flat on the build plate.",
+    "comparison": [
+        {
+            "feature": "Outer silhouette",
+            "expected": "Rectangular block profile",
+            "observed": "Matching rectangular printed block",
+            "difference": "None"
+        }
+    ],
+    "reason": "Printed object matches expected g-code layer profile without visible shifts or defects."
+}

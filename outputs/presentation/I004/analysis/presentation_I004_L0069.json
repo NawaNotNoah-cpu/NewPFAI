@@ -1,0 +1,17 @@
+{
+    "healthy": true,
+    "confidence": 82,
+    "severity": 0,
+    "failure_type": "none",
+    "expected_description": "Solid orange rectangular block silhouette with a extended brim base.",
+    "observed_description": "Printed orange structure on build plate matching expected height and wall perimeter.",
+    "comparison": [
+        {
+            "feature": "Outer Profile",
+            "expected": "Rectangular vertical wall profile",
+            "observed": "Vertical walls matching expected layer height",
+            "difference": "None"
+        }
+    ],
+    "reason": "Printed geometry aligns with expected layer render without visible defects."
+}

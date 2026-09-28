@@ -1,0 +1,17 @@
+{
+    "healthy": true,
+    "confidence": 88,
+    "severity": 0,
+    "failure_type": "none",
+    "expected_description": "Solid rectangular geometry printed to current layer height with brim base.",
+    "observed_description": "Solid orange rectangular block cleanly extruded under the nozzle.",
+    "comparison": [
+        {
+            "feature": "Outer Profile",
+            "expected": "Rectangular block silhouette",
+            "observed": "Matching orange block silhouette",
+            "difference": "None visible"
+        }
+    ],
+    "reason": "The observed physical print geometry matches the rendered layer cross-section without visible defects or layer displacement."
+}

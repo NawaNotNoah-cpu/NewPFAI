@@ -1,0 +1,17 @@
+{
+    "healthy": true,
+    "confidence": 88,
+    "severity": 0,
+    "failure_type": "none",
+    "expected_description": "A flat orange profile featuring a raised central rectangular section with thin horizontal wings extending to both sides.",
+    "observed_description": "An orange plastic print on the build plate showing a raised central block and thin side wings.",
+    "comparison": [
+        {
+            "feature": "Overall profile",
+            "expected": "Central raised block with thin side wings.",
+            "observed": "Central raised block with thin side wings.",
+            "difference": "None."
+        }
+    ],
+    "reason": "The printed orange geometry matches the expected profile from the render, showing correct shape and bed adhesion."
+}

@@ -1,0 +1,17 @@
+{
+    "healthy": true,
+    "confidence": 90,
+    "severity": 0,
+    "failure_type": "none",
+    "expected_description": "A central raised rectangular block with thin horizontal wings extending to the left and right.",
+    "observed_description": "An orange printed structure matching the central block and side wings, with the nozzle positioned over the center.",
+    "comparison": [
+        {
+            "feature": "Overall profile",
+            "expected": "Central block with side wings.",
+            "observed": "Central block with side wings.",
+            "difference": "None."
+        }
+    ],
+    "reason": "The printed geometry matches the expected G-code render profile perfectly."
+}

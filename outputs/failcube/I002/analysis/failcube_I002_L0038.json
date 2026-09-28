@@ -1,0 +1,17 @@
+{
+    "healthy": true,
+    "confidence": 88,
+    "severity": 0,
+    "failure_type": "none",
+    "expected_description": "A solid rectangular orange block with a thin horizontal brim at the base.",
+    "observed_description": "An orange rectangular block printed on the bed with a visible brim, matching the expected shape.",
+    "comparison": [
+        {
+            "feature": "Main body profile",
+            "expected": "Rectangular block shape with brim.",
+            "observed": "Rectangular block shape with brim.",
+            "difference": "None."
+        }
+    ],
+    "reason": "The printed orange block matches the expected rectangular geometry and brim shown in the render."
+}

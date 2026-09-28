@@ -1,0 +1,7 @@
+{
+    "healthy": false,
+    "confidence": 96,
+    "severity": 6,
+    "failure_type": "missing sections",
+    "reason": "Missing geometry in the middle section."
+}

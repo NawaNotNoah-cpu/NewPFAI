@@ -1,0 +1,17 @@
+{
+    "healthy": true,
+    "confidence": 85,
+    "severity": 0,
+    "failure_type": "none",
+    "expected_description": "Solid orange block with brim base.",
+    "observed_description": "Matching orange block structure on build plate.",
+    "comparison": [
+        {
+            "feature": "overall shape",
+            "expected": "Rectangular block profile",
+            "observed": "Corresponding block profile",
+            "difference": "None"
+        }
+    ],
+    "reason": "Printed object matches rendered layer geometry perfectly."
+}

@@ -1,0 +1,17 @@
+{
+    "healthy": true,
+    "confidence": 85,
+    "severity": 0,
+    "failure_type": "none",
+    "expected_description": "Solid orange block structure with a wide brim base.",
+    "observed_description": "Orange printed object with clean walls directly under the nozzle.",
+    "comparison": [
+        {
+            "feature": "Overall Geometry",
+            "expected": "Rectangular solid section on brim",
+            "observed": "Intact orange structure on build bed",
+            "difference": "No significant variance observed"
+        }
+    ],
+    "reason": "The visible printed shape matches the layer geometry shown in the render."
+}

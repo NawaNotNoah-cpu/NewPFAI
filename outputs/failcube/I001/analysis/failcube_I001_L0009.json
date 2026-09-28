@@ -1,0 +1,17 @@
+{
+    "healthy": true,
+    "confidence": 88,
+    "severity": 0,
+    "failure_type": "none",
+    "expected_description": "A central raised rectangular block with thin horizontal flanges extending to the left and right.",
+    "observed_description": "An orange printed structure on the build plate featuring a central raised rectangular section and thin horizontal flanges on both sides.",
+    "comparison": [
+        {
+            "feature": "overall profile",
+            "expected": "Central raised block with side flanges.",
+            "observed": "Central raised block with side flanges.",
+            "difference": "None."
+        }
+    ],
+    "reason": "The printed orange geometry matches the expected profile from the render, showing correct shape and adhesion."
+}
